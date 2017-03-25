@@ -1,6 +1,16 @@
 Just Say NO to nano
 ===================
 
+Install
+-------
+
+```
+go get -u github.com/skilstak/nano
+```
+
+Motivation
+----------
+
 Nano is a horrible editor, beyond horrible! Here is a list of the reasons why:
 
 -	Encourages beginners to use ctrl-x, (which suspends stuff everywhere else)

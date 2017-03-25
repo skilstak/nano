@@ -12,6 +12,10 @@ import (
 	c "github.com/skilstak/go-colors"
 )
 
+//--------------------------------------------
+
+const nw = 90
+const nh = 22
 const nano1 = `
 [0;31m                                        [1;31m NNNNNNNN        NNNNNNNN     OOOOOOOOO      !!! 
 [0;31m                                        [1;31m N:::::::N       N::::::N   OO:::::::::OO   !!:!!
@@ -30,7 +34,7 @@ const nano1 = `
 [0;31m  n::::n    n::::n a::::::::::aa:::a    [1;31m N::::::N        N::::::N   OO:::::::::OO   !!:!!
 [0;31m  nnnnnn    nnnnnn  aaaaaaaaaa  aaaa    [1;31m NNNNNNNN         NNNNNNN     OOOOOOOOO      !!! 
 
-                      [0;33mBut seriously, learn vi (not even vim).
+                      [0;36mBut seriously, learn vi (not even vim).
                          You will be a better developer
                              and systems engineer.[0m
 `
@@ -51,17 +55,64 @@ const nano2 = `
 [0;31m  n::::n    n::::na::::a    a:::::a     [0;31m N::::::N      N::::::::NO:::::::OOO:::::::O     
 [0;31m  n::::n    n::::na:::::aaaa::::::a     [0;31m N::::::N       N:::::::N OO:::::::::::::OO  !!! 
 [0;31m  n::::n    n::::n a::::::::::aa:::a    [0;31m N::::::N        N::::::N   OO:::::::::OO   !!:!!
-[0;31m  nnnnnn    nnnnnn  aaaaaaaaaa  aaaa    [0;31m NNNNNNNN         NNNNNNN     OOOOOOOOO      !!! 
+  nnnnnn    nnnnnn  aaaaaaaaaa  aaaa    [0;31m NNNNNNNN         NNNNNNN     OOOOOOOOO      !!! 
 
-                      [0;33mBut seriously, learn vi (not even vim).
+                      [0;36mBut seriously, learn vi (not even vim).
                          You will be a better developer
                              and systems engineer.[0m
 `
 
+//--------------------------------------------
+
+const sw = 24
+const sh = 8
+const nano1s = `
+       [0;31mna [0;31mNOOOO!
+
+     [0;36mBut seriously,
+learn vi (not even vim).
+  You will be a better
+ developer and engineer.[0m
+`
+
+const nano2s = `
+       [0;31mna [1;31mNOOOO!
+
+     [0;36mBut seriously,
+learn vi (not even vim).
+  You will be a better
+ developer and engineer.[0m
+`
+
+//--------------------------------------------
+
+const xsw = 9
+const xsh = 3
+const nano1xs = "\n[0;31mna [0;31mNOOOO![0m\n"
+const nano2xs = "\n[0;31mna [1;31mNOOOO![0m\n"
+
+//--------------------------------------------
+
 func display() {
 	ws := getwinsize()
-	cws := ws.Col - 88
-	rws := ws.Row - 18
+	n1 := nano1xs
+	n2 := nano2xs
+	w := xsw
+	h := xsh
+	switch {
+	case ws.Col >= 88 && ws.Row >= 22:
+		n1 = nano1
+		n2 = nano2
+		w = nw
+		h = nh
+	case ws.Col > 24 && ws.Row > 6:
+		n1 = nano1s
+		n2 = nano2s
+		w = sw
+		h = sh
+	}
+	cws := ws.Col - uint16(w)
+	rws := ws.Row - uint16(h)
 	if cws > 0 {
 		cws /= 2
 	}
@@ -71,18 +122,18 @@ func display() {
 	cpad := strings.Repeat(" ", int(cws))
 	rpad := strings.Repeat("\n", int(rws))
 
-	fmt.Print(c.Clear + c.CurOff + rpad)
 	var buf string
 
-	buf = strings.Replace(nano1, "\n", "\n"+cpad, -1)
+	fmt.Print(c.Clear + c.CurOff + rpad)
+	buf = strings.Replace(n1, "\n", "\n"+cpad, -1)
 	fmt.Print(buf)
 	time.Sleep(800 * time.Millisecond)
 
 	fmt.Print(c.Clear + c.CurOff + rpad)
-
-	buf = strings.Replace(nano2, "\n", "\n"+cpad, -1)
+	buf = strings.Replace(n2, "\n", "\n"+cpad, -1)
 	fmt.Print(buf)
 	time.Sleep(800 * time.Millisecond)
+
 }
 
 type winsize struct {

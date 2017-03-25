@@ -1,3 +1,5 @@
+![](naNO.gif)
+
 Just Say NO to nano
 ===================
 
